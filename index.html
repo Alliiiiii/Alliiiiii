@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCQ Quiz System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            background-color: #f1f1f1;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+        
+        .tab-button.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 12px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .button-row {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .options {
+            margin-top: 10px;
+        }
+        
+        .option {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option input {
+            margin-right: 10px;
+        }
+        
+        .option label {
+            cursor: pointer;
+            flex-grow: 1;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .option label:hover {
+            background-color: #e9f7fe;
+        }
+        
+        .results {
+            margin-top: 20px;
+        }
+        
+        .progress {
+            height: 10px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .correct {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .incorrect {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .instructions {
+            background-color: #eaf2f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .timer {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 600px) {
+            .tab-buttons {
+                flex-direction: column;
+            }
+            
+            .tab-button {
+                border-radius: 0;
+                margin-right: 0;
+                margin-bottom: 2px;
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>MCQ Quiz System</h1>
+    
+    <div class="container">
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="openTab('setupTab')">Setup Quiz</button>
+            <button class="tab-button" onclick="openTab('takeQuizTab')" id="takeQuizButton" disabled>Take Quiz</button>
+            <button class="tab-button" onclick="openTab('resultsTab')" id="resultsButton" disabled>Results</button>
+        </div>
+        
+        <!-- Setup Tab -->
+        <div id="setupTab" class="tab-content active">
+            <div class="instructions">
+                <h3>Instructions for Quiz Setup:</h3>
+                <p>1. Enter questions with options in the format shown in the example below.</p>
+                <p>2. Each question should start with "Q:" followed by the question text.</p>
+                <p>3. Each option should start with "A:", "B:", "C:", or "D:" followed by the option text.</p>
+                <p>4. Mark the correct answer with "*" at the beginning (e.g., "*A:" indicates A is correct).</p>
+                <p>5. Separate questions with a blank line.</p>
+            </div>
+            
+            <textarea id="quizSetup" placeholder="Example format:
+
+Q: What is the capital of France?
+A: London
+*B: Paris
+C: Berlin
+D: Madrid
+
+Q: Which planet is known as the Red Planet?
+A: Venus
+B: Jupiter
+*C: Mars
+D: Saturn"></textarea>
+            
+            <div class="button-row">
+                <button onclick="clearSetup()">Clear</button>
+                <button onclick="loadSampleQuiz()">Load Sample Quiz</button>
+                <button onclick="setupQuiz()">Create Quiz</button>
+            </div>
+        </div>
+        
+        <!-- Take Quiz Tab -->
+        <div id="takeQuizTab" class="tab-content">
+            <div class="timer" id="timer">Time: 00:00</div>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <div id="questionContainer">
+                <!-- Questions will be inserted here -->
+            </div>
+            
+            <div class="button-row">
+                <button id="prevButton" onclick="showPreviousQuestion()" disabled>Previous</button>
+                <button id="nextButton" onclick="showNextQuestion()">Next</button>
+                <button id="submitButton" class="hidden" onclick="finishQuiz()">Submit Quiz</button>
+            </div>
+        </div>
+        
+        <!-- Results Tab -->
+        <div id="resultsTab" class="tab-content">
+            <h2>Quiz Results</h2>
+            
+            <div id="scoreContainer">
+                <h3>Score: <span id="score">0</span> / <span id="totalQuestions">0</span></h3>
+                <h3>Percentage: <span id="percentage">0</span>%</h3>
+                <h3>Time Taken: <span id="timeTaken">00:00</span></h3>
+            </div>
+            
+            <div id="resultsContainer">
+                <!-- Results will be inserted here -->
+            </div>
+            
+            <div class="button-row">
+                <button onclick="retakeQuiz()">Retake Quiz</button>
+                <button onclick="resetQuiz()">Setup New Quiz</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Global variables
+        let questions = [];
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let timer;
+        let seconds = 0;
+        
+        // Open tab
+        function openTab(tabName) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            const tabButtons = document.getElementsByClassName("tab-button");
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            document.querySelector(`button[onclick="openTab('${tabName}')"]`).classList.add("active");
+        }
+        
+        // Clear setup
+        function clearSetup() {
+            document.getElementById("quizSetup").value = "";
+        }
+        
+        // Load sample quiz
+        function loadSampleQuiz() {
+            document.getElementById("quizSetup").value = `Q: What is the capital of France?
+A: London
+*B: Paris
+C: Berlin
+D: Madrid
+
+Q: Which planet is known as the Red Planet?
+A: Venus
+B: Jupiter
+*C: Mars
+D: Saturn
+
+Q: Who wrote "Romeo and Juliet"?
+A: Charles Dickens
+B: Jane Austen
+*C: William Shakespeare
+D: Mark Twain
+
+Q: What is the chemical symbol for gold?
+*A: Au
+B: Ag
+C: Fe
+D: Cu
+
+Q: Which of these is NOT a programming language?
+A: Python
+B: Java
+C: JavaScript
+*D: Crocodile`;
+        }
+        
+        // Parse quiz setup
+        function parseQuizSetup(text) {
+            const lines = text.split('\n');
+            const parsedQuestions = [];
+            
+            let currentQuestion = null;
+            let correctAnswer = null;
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                if (line === '') {
+                    if (currentQuestion) {
+                        currentQuestion.correctAnswer = correctAnswer;
+                        parsedQuestions.push(currentQuestion);
+                        currentQuestion = null;
+                        correctAnswer = null;
+                    }
+                    continue;
+                }
+                
+                if (line.startsWith('Q:')) {
+                    if (currentQuestion) {
+                        currentQuestion.correctAnswer = correctAnswer;
+                        parsedQuestions.push(currentQuestion);
+                    }
+                    
+                    currentQuestion = {
+                        question: line.substring(2).trim(),
+                        options: [],
+                        correctAnswer: null
+                    };
+                    correctAnswer = null;
+                } else if (currentQuestion) {
+                    const optionMatch = line.match(/^(\*?)([A-D]):(.+)$/);
+                    
+                    if (optionMatch) {
+                        const isCorrect = optionMatch[1] === '*';
+                        const optionLetter = optionMatch[2];
+                        const optionText = optionMatch[3].trim();
+                        
+                        currentQuestion.options.push({
+                            letter: optionLetter,
+                            text: optionText
+                        });
+                        
+                        if (isCorrect) {
+                            correctAnswer = optionLetter;
+                        }
+                    }
+                }
+            }
+            
+            if (currentQuestion) {
+                currentQuestion.correctAnswer = correctAnswer;
+                parsedQuestions.push(currentQuestion);
+            }
+            
+            return parsedQuestions;
+        }
+        
+        // Setup quiz
+        function setupQuiz() {
+            const quizText = document.getElementById("quizSetup").value;
+            
+            if (!quizText.trim()) {
+                alert("Please enter quiz questions!");
+                return;
+            }
+            
+            questions = parseQuizSetup(quizText);
+            
+            if (questions.length === 0) {
+                alert("No valid questions found. Please check the format.");
+                return;
+            }
+            
+            // Initialize user answers
+            userAnswers = new Array(questions.length).fill(null);
+            
+            // Enable take quiz tab
+            document.getElementById("takeQuizButton").disabled = false;
+            
+            // Prepare question display
+            renderQuestion(0);
+            
+            // Switch to take quiz tab
+            openTab('takeQuizTab');
+            
+            // Reset and start timer
+            seconds = 0;
+            updateTimer();
+            timer = setInterval(updateTimer, 1000);
+            
+            // Update progress bar
+            updateProgress();
+        }
+        
+        // Update timer
+        function updateTimer() {
+            seconds++;
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            document.getElementById("timer").textContent = `Time: ${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+        
+        // Render question
+        function renderQuestion(index) {
+            const question = questions[index];
+            const container = document.getElementById("questionContainer");
+            
+            container.innerHTML = `
+                <div class="question">
+                    <h3>Question ${index + 1} of ${questions.length}</h3>
+                    <p>${question.question}</p>
+                    <div class="options">
+                        ${question.options.map(option => `
+                            <div class="option">
+                                <input type="radio" id="option${option.letter}" 
+                                       name="question${index}" value="${option.letter}"
+                                       ${userAnswers[index] === option.letter ? 'checked' : ''}>
+                                <label for="option${option.letter}">${option.letter}: ${option.text}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners for options
+            question.options.forEach(option => {
+                document.getElementById(`option${option.letter}`).addEventListener('change', function() {
+                    userAnswers[index] = option.letter;
+                    updateProgress();
+                });
+            });
+            
+            // Update buttons
+            document.getElementById("prevButton").disabled = index === 0;
+            
+            if (index === questions.length - 1) {
+                document.getElementById("nextButton").classList.add("hidden");
+                document.getElementById("submitButton").classList.remove("hidden");
+            } else {
+                document.getElementById("nextButton").classList.remove("hidden");
+                document.getElementById("submitButton").classList.add("hidden");
+            }
+            
+            currentQuestion = index;
+        }
+        
+        // Show next question
+        function showNextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                renderQuestion(currentQuestion + 1);
+            }
+        }
+        
+        // Show previous question
+        function showPreviousQuestion() {
+            if (currentQuestion > 0) {
+                renderQuestion(currentQuestion - 1);
+            }
+        }
+        
+        // Update progress bar
+        function updateProgress() {
+            const answered = userAnswers.filter(answer => answer !== null).length;
+            const percentage = (answered / questions.length) * 100;
+            document.getElementById("progressBar").style.width = `${percentage}%`;
+        }
+        
+        // Finish quiz
+        function finishQuiz() {
+            // Check if all questions are answered
+            const unanswered = userAnswers.filter(answer => answer === null).length;
+            
+            if (unanswered > 0) {
+                if (!confirm(`You have ${unanswered} unanswered question(s). Are you sure you want to submit?`)) {
+                    return;
+                }
+            }
+            
+            // Stop timer
+            clearInterval(timer);
+            
+            // Calculate score
+            let score = 0;
+            for (let i = 0; i < questions.length; i++) {
+                if (userAnswers[i] === questions[i].correctAnswer) {
+                    score++;
+                }
+            }
+            
+            // Update results
+            document.getElementById("score").textContent = score;
+            document.getElementById("totalQuestions").textContent = questions.length;
+            document.getElementById("percentage").textContent = Math.round((score / questions.length) * 100);
+            document.getElementById("timeTaken").textContent = document.getElementById("timer").textContent.replace("Time: ", "");
+            
+            // Render detailed results
+            renderResults();
+            
+            // Enable results tab
+            document.getElementById("resultsButton").disabled = false;
+            
+            // Switch to results tab
+            openTab('resultsTab');
+        }
+        
+        // Render results
+        function renderResults() {
+            const container = document.getElementById("resultsContainer");
+            container.innerHTML = "";
+            
+            for (let i = 0; i < questions.length; i++) {
+                const question = questions[i];
+                const userAnswer = userAnswers[i];
+                const isCorrect = userAnswer === question.correctAnswer;
+                
+                container.innerHTML += `
+                    <div class="result-item">
+                        <div>
+                            <p><strong>Q${i + 1}:</strong> ${question.question}</p>
+                            <p>Your answer: ${userAnswer ? userAnswer : 'Not answered'} - 
+                               <span class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? 'Correct' : 'Incorrect'}</span></p>
+                            <p>Correct answer: ${question.correctAnswer}</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Retake quiz
+        function retakeQuiz() {
+            userAnswers = new Array(questions.length).fill(null);
+            currentQuestion = 0;
+            seconds = 0;
+            
+            // Render first question
+            renderQuestion(0);
+            
+            // Start timer
+            clearInterval(timer);
+            updateTimer();
+            timer = setInterval(updateTimer, 1000);
+            
+            // Update progress
+            updateProgress();
+            
+            // Switch to take quiz tab
+            openTab('takeQuizTab');
+        }
+        
+        // Reset quiz
+        function resetQuiz() {
+            // Clear everything
+            questions = [];
+            userAnswers = [];
+            currentQuestion = 0;
+            seconds = 0;
+            clearInterval(timer);
+            
+            // Disable tabs
+            document.getElementById("takeQuizButton").disabled = true;
+            document.getElementById("resultsButton").disabled = true;
+            
+            // Switch to setup tab
+            openTab('setupTab');
+        }
+    </script>
+</body>
+</html>
