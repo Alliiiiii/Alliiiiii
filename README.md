@@ -54,8 +54,9 @@ Relevant coursework: Programming Fundamentals, Data Structures & Algorithms, Web
 
 ## 📊 GitHub Stats
 <div align="center">
- <img src="https://github-readme-stats.vercel.app/api?username=Alliiiiii&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" alt="GitHub Stats" />
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Alliiiiii&layout=compact&theme=tokyonight&hide_border=true&count_private=true" alt="Top Languages" />
+  <img src="./profile/stats.svg" height="165" alt="GitHub Stats" />
+  <img src="./profile/top-langs.svg" height="165" alt="Top Languages" />
+</div>
 <div align="center">
   <img src="https://github-readme-streak-stats.herokuapp.com/?user=Alliiiiii&theme=tokyonight&hide_border=true" />
 </div>
