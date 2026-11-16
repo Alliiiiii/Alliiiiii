@@ -38,7 +38,7 @@ Relevant coursework: Programming Fundamentals, Data Structures & Algorithms, Web
 | Project | Description |
 |---|---|
 | [**PhishLens**](https://github.com/Alliiiiii/phishlens) | 🔍 ML-powered phishing URL detector with real-time threat scoring |
-| [**Raza Portfolio**](https://github.com/Alliiiiii/raza-portfolio) | 💼 Modern personal portfolio with animations and dark mode |
+| [**Raza Portfolio**](https://raza-portfolio-lemon.vercel.app) | 💼 Modern personal portfolio with animations and dark mode |
 | [**Python Data Cleaner**](https://github.com/Alliiiiii/python-data-cleaner) | 🧹 One-click CSV/Excel sanitizer for messy datasets |
 
 ## 📜 Certifications
