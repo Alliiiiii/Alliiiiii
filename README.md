@@ -58,7 +58,7 @@ Relevant coursework: Programming Fundamentals, Data Structures & Algorithms, Web
   <img src="./profile/top-langs.svg" height="165" alt="Top Languages" />
 </div>
 <div align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=Alliiiiii&theme=tokyonight&hide_border=true" />
+  <img src="https://streak-stats.demolab.com/?user=Alliiiiii&theme=tokyonight&hide_border=true" />
 </div>
 
 ## 🤝 Connect
