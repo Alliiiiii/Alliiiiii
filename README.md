@@ -40,6 +40,7 @@ Relevant coursework: Programming Fundamentals, Data Structures & Algorithms, Web
 | [**PhishLens**](https://github.com/Alliiiiii/phishlens) | 🔍 ML-powered phishing URL detector with real-time threat scoring |
 | [**Raza Portfolio**](https://raza-portfolio-lemon.vercel.app) | 💼 Modern personal portfolio with animations and dark mode |
 | [**Python Data Cleaner**](https://github.com/Alliiiiii/python-data-cleaner) | 🧹 One-click CSV/Excel sanitizer for messy datasets |
+| [**SentinelLog AI**](https://github.com/Alliiiiii/sentinellog-ai) | 🛡️ Lightweight SIEM dashboard: log ingestion, attack visualization, AI threat summaries (FastAPI + Next.js) |
 
 ## 📜 Certifications
 - Build a Free Website with WordPress — Coursera (Apr 2025)
